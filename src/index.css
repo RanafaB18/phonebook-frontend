@@ -1,0 +1,88 @@
+* {
+    box-sizing: border-box;
+}
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.02);
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 5px;
+}
+h1 {
+  color: green;
+}
+.notif {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(207, 213, 213);
+  border: 2px solid green;
+  font-size: 20px;
+}
+.notification {
+  color: green;
+}
+
+.error {
+  color: red;
+  border-color: red;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    font-size: 18px;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.filter {
+    font-size: 18px;
+}
+hr {
+    border: 1px solid #999;
+    width: 100%;
+}
+
+h2 {
+    letter-spacing: 2px;
+}
+input {
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+.button {
+    align-self: center;
+    padding: 2px 20px;
+    font-size: 15px;
+    letter-spacing: 1px;
+
+}
+
+button {
+    cursor: pointer;
+}
+
+.list {
+    background-color: #ece4e4;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.list > label {
+    width: 150px;
+    word-wrap: break-word;
+}
