@@ -1,13 +1,12 @@
 import React from "react";
 
 
-const Notification = ({message}) => {
+const Notification = ({message, error}) => {
     if (!message){
         return null
     }
-    const color = message.includes("removed")
     return (
-        <div className={color ? "error notif" : "notif notification"}>
+        <div className={error ? "error notif" : "notif notification"}>
             {message}
         </div>
     )

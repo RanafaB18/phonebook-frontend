@@ -17,15 +17,17 @@ const PersonForm = ({
             name="name"
             onChange={onTextChange}
             value={newName}
+            autoComplete="off"
           />
         </div>
         <div className="form-group">
-          <label htmlFor="name">Number:</label>
+          <label htmlFor="number">Number:</label>
           <input
-            id="name"
-            name="name"
+            id="number"
+            name="number"
             onChange={onNumberChange}
             value={newNumber}
+            autoComplete="off"
           />
         </div>
         <button type="submit" className="button">

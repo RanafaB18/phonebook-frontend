@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
   const [message, setMessage] = useState(null);
+  const [error, setError] = useState(false);
   const [copy, setCopy] = useState(persons);
 
   React.useEffect(() => {
@@ -23,6 +24,13 @@ const App = () => {
     setCopy(persons);
   }, [persons]);
 
+  const notificationPopUp = (message, time, error) => {
+    setMessage(message);
+    setError(error)
+      setTimeout(() => {
+        setMessage(null);
+      }, time);
+  }
   const handleTextChange = (event) => {
     setNewName(event.target.value);
   };
@@ -47,13 +55,15 @@ const App = () => {
     event.preventDefault();
     const newPerson = { name: newName, number: newNumber };
     if (uniqueName(newName)) {
-      axiosUtil.create(newPerson).then((addedPerson) => {
-        setPersons([...persons, addedPerson]);
-      });
-      setMessage(`Added ${newPerson.name}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 2000);
+      axiosUtil
+        .create(newPerson)
+        .then((addedPerson) => {
+          setPersons([...persons, addedPerson]);
+          notificationPopUp(`Added ${newPerson.name}`, 2000, false)
+        })
+        .catch((error) => {
+          notificationPopUp(error.response.data.error, 8000, true)
+        });
     } else {
       const message = `${newName} is already added to phonebook, replace the old number with a new one`;
       if (window.confirm(message)) {
@@ -61,11 +71,7 @@ const App = () => {
           (person) => person.name.toLowerCase() === newPerson.name.toLowerCase()
         );
         const updatedPerson = { ...existentUser, number: newPerson.number };
-        setMessage(`Updated ${existentUser.name}'s number`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 2000);
-
+        notificationPopUp(`Updated ${existentUser.name}'s number`, 2000, false)
         axiosUtil
           .update(existentUser.id, updatedPerson)
           .then((response) => {
@@ -80,12 +86,7 @@ const App = () => {
           })
           .catch((error) => {
             console.log("Already deleted");
-            setMessage(
-              `Information of ${existentUser.name} has already been removed from server`
-            );
-            setTimeout(() => {
-              setMessage(null);
-            }, 3000);
+            notificationPopUp(`Information of ${existentUser.name} has already been removed from server`, 3000, true)
             setPersons(
               persons.filter((person) => person.id !== existentUser.id)
             );
@@ -104,26 +105,22 @@ const App = () => {
 
   const handleDelete = (id) => {
     const deletedPersonName = persons.find((person) => person.id === id);
+    console.log("Deleted...", deletedPersonName)
     if (window.confirm(`Delete ${deletedPersonName.name} ?`)) {
       setPersons(persons.filter((person) => person.id !== id));
-      axiosUtil.deletePerson(id).catch(
-        (error) => {
-          console.log("Delete failed")
-          setMessage(
-            `Information of ${deletedPersonName.name} has already been removed from server`
-          );
-          setTimeout(() => {
-            setMessage(null);
-          }, 3000);
-          setPersons(
-            persons.filter((person) => person.id !== deletedPersonName.id)
-          );
-        });
+      axiosUtil.deletePerson(id)
+      .catch((error) => {
+        console.log("Delete failed");
+        notificationPopUp(`Information of ${deletedPersonName.name} has already been removed from server`, 3000, true)
+        setPersons(
+          persons.filter((person) => person.id !== deletedPersonName.id)
+        );
+      });
     }
   };
   return (
     <div className="app">
-      <Notification message={message} />
+      <Notification message={message} error={error} />
       <h2>Phonebook</h2>
       <Filter filterName={filterName} onFilterChange={handleFilterChange} />
       <hr />
